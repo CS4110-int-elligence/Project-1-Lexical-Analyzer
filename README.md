@@ -1,4 +1,4 @@
-# Project 1: Lexical Analyzer
+# Compiler Project
 Group Members: Brandon Prak, Riley Kuttruff, Adam Do
 
 Software Versions:  
