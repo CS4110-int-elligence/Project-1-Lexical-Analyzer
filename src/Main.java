@@ -5,6 +5,8 @@ import java.io.*;
 
 public class Main{
 	
+	private static final int MODE = 1;
+	
 	public static void main(String[] args){
 		if(args.length != 1){
 			System.out.println("Enter only one argument");
@@ -27,52 +29,67 @@ public class Main{
 		
 		Lexer lex = new Lexer(r);
 		
-		List<Lexer.Token> tokens = new ArrayList<>();
 		
-		while(!(lex.isDone() || lex.errorOccurred())){
-			try{
-				Lexer.Token t = lex.next_token();
-				if(!(t == null && lex.isDone()))
-					tokens.add(t);
-			}
-			catch(IOException e){
-				System.out.println("An IOException occurred:");
-				e.printStackTrace(System.out);
-				
-				System.exit(3);
-			}
-		}
+		if(MODE == 0){
+			List<Lexer.Token> tokens = new ArrayList<>();
 		
-		Iterator<Lexer.Token> itr = tokens.iterator();
-		
-		Lexer.Token t = null;
-		int line = 0;
-		
-		if(itr.hasNext()){
-			t = itr.next();
-			line = t.getLineNumber();
-			
-			System.out.print(t);
-			
-			while(itr.hasNext()){
-				t = itr.next();
-				int nextLine = t.getLineNumber();
-				
-				if(nextLine != line){
-					line = nextLine;
+			while(!(lex.isDone() || lex.errorOccurred())){
+				try{
+					Lexer.Token t = lex.next_token();
+					if(!(t == null && lex.isDone()))
+						tokens.add(t);
+				}
+				catch(IOException e){
+					System.out.println("An IOException occurred:");
+					e.printStackTrace(System.out);
 					
-					System.out.println();
-					System.out.print(t);
-				}
-				else{
-					System.out.print(" " + t.toString());
+					System.exit(3);
 				}
 			}
 			
-			System.out.println();
-			System.out.println();
+			Iterator<Lexer.Token> itr = tokens.iterator();
 			
-			System.out.println(lex.symbolTable);
+			Lexer.Token t = null;
+			int line = 0;
+			
+			if(itr.hasNext()){
+				t = itr.next();
+				line = t.getLineNumber();
+				
+				System.out.print(t);
+				
+				while(itr.hasNext()){
+					t = itr.next();
+					int nextLine = t.getLineNumber();
+					
+					if(nextLine != line){
+						line = nextLine;
+						
+						System.out.println();
+						System.out.print(t);
+					}
+					else{
+						System.out.print(" " + t.toString());
+					}
+				}
+				
+				System.out.println();
+				System.out.println();
+				
+				System.out.println(lex.symbolTable);
+			}
 		}
+		else if(MODE == 1){
+			Parser p = new Parser(lex);
+			
+			try{
+				p.parse();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		
+		
 	}
 }
