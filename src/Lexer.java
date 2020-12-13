@@ -471,6 +471,7 @@ public static class Token extends java_cup.runtime.Symbol{
 	public static final int _BOOLEANCONSTANT = 53;
 	public static final int _ID = 50;
 	public static final int _ERROR = 1;
+	public static final int _EOF = 0;
 
 	private final int type, line;
 	private final String value;
@@ -601,6 +602,8 @@ public static class Token extends java_cup.runtime.Symbol{
 				return "id";
 			case _ERROR:
 				return "error";
+			case _EOF:
+				return "EOF";
 			default:
 				return "unknown";
 		}
@@ -621,6 +624,17 @@ public boolean isDone(){
 
 public boolean errorOccurred(){
 	return error;
+}
+
+public Token next_token() throws Exception{
+	try{
+		Token t = yylex();
+		
+		return t != null ? t : (done ? Token.build(Token._EOF, currentLine) : null);
+	}
+	catch(java.io.IOException e){
+		throw new Exception(e);
+	}
 }
 
 
@@ -912,7 +926,7 @@ public boolean errorOccurred(){
    * @return the next token.
    * @exception java.io.IOException if any I/O-Error occurs.
    */
-  public Token next_token() throws java.io.IOException {
+  public Token yylex() throws java.io.IOException {
     int zzInput;
     int zzAction;
 
