@@ -3,12 +3,15 @@ import java.util.*;
 %%
 %class Lexer
 %type Token
+%implements java_cup.runtime.Scanner
 %eofclose
 %public
 
+%function next_token
+
 %{
 // Class for tokens
-public static class Token{
+public static class Token extends java_cup.runtime.Symbol{
 	public static final int _BOOLEAN = 0;
 	public static final int _BREAK = 1;
 	public static final int _CLASS = 2;
@@ -64,6 +67,7 @@ public static class Token{
 	private final String value;
 
 	private Token(int type, String value, int line) {
+		super(type, line);
 		this.type = type;
 		this.value = value;
 		this.line = line;

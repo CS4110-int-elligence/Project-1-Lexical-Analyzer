@@ -31,7 +31,7 @@ public class Main{
 		
 		while(!(lex.isDone() || lex.errorOccurred())){
 			try{
-				Lexer.Token t = lex.yylex();
+				Lexer.Token t = lex.next_token();
 				if(!(t == null && lex.isDone()))
 					tokens.add(t);
 			}
